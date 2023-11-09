@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
+from operator import itemgetter
 import logging
 import json
 
@@ -27,20 +28,30 @@ def contact(request):
     return render(request, 'djangoapp/contact.html')
 
 # Create a `login_request` view to handle sign in request
-# def login_request(request):
-# ...
+def login_request(request):
+    username, password = itemgetter('username', 'passwd')(request.POST)
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect(reverse('djangoapp:index'))
+    return redirect(reverse('djangoapp:signup'))
 
 # Create a `logout_request` view to handle sign out request
-# def logout_request(request):
-# ...
+def logout_request(request):
+    logout(request)
+    return redirect(reverse('djangoapp:index'))
 
 # Create a `registration_request` view to handle sign up request
-# def registration_request(request):
-# ...
+def registration_request(request):
+    if request.method == 'POST':
+        pass
+    return render(request, 'djangoapp/registration.html')
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
-def get_dealerships(request):
+def get_dealerships(request, msg=None):
     context = {}
+    if msg:
+        context.update(msg=msg)
     if request.method == "GET":
         return render(request, 'djangoapp/index.html', context)
 

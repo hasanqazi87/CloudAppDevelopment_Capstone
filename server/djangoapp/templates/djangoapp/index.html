@@ -26,12 +26,20 @@
             <a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a>
         </div>
         <div class="navbar-header">
-            <form action="" method="post">
+            {% if user.is_authenticated %}
+            <span>Hello <strong>{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</strong></span>
+            <a href="{% url 'djangoapp:logout' %}"><input type="button" value="Log Out" class="btn btn-secondary"></a>
+            {% else %}
+            <form action="{% url 'djangoapp:login' %}" method="post">
+            {% csrf_token %}
+            {% if msg %}<span>{{ msg }}<span>{% endif %}
             <input type="text" name="username" placeholder="Username">
-            <input type="password" name="passwrd" placeholder="Password">
+            <input type="password" name="passwd" placeholder="Password">
             <input type="submit" value="Log In" class="btn btn-primary">
-            <input type="button" value="Sign Up" class="btn btn-secondary">
+            <a href="#"><input type="button" value="Sign Up" class="btn btn-secondary"></a>
             </form>
+            
+            {% endif %}
         </div>
     </div>
 </nav>
