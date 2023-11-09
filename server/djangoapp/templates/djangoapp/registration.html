@@ -4,28 +4,35 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Registration Form</title>
 </head>
 <body>
 <!--Add a registration form here -->
 <h1>Registration Form</h1>
 <form action="{% url 'djangoapp:signup' %}" method="post">
-<div class="container-fluid">
-    <label for="username">User Name</label>
-    <input type="text" name="username" class="form-control">
-</div>
-<div class="container-fluid">
-    <label for="firstname">First Name</label>
-    <input type="text" name="firstname" class="form-control">
-</div>
-<div class="container-fluid">
-    <label for="lastname">Last Name</label>
-    <input type="text" name="lastname" class="form-control">
-</div>
-<div class="container-fluid">
-    <label for="passwd">Password</label>
-    <input type="password" name="passwd" class="form-control">
-</div>
-<input type="submit" value="Sign Up" class="btn btn-primary">
+{% csrf_token %}
+<table>
+    <tr>
+        <th>User Name</th>
+        <td><input type="text" name="username" class="form-control"></td>
+    </tr>
+    <tr>
+        <th>First Name</th>
+        <td><input type="text" name="firstname" class="form-control"></td>
+    </tr>
+    <tr>
+        <th>Last Name</th>
+        <td><input type="text" name="lastname" class="form-control"></td>
+    </tr>
+    <tr>
+        <th>Password</th>
+        <td><input type="password" name="passwd" class="form-control"></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><input type="submit" value="Sign Up" class="btn btn-primary"></td>
+    </tr>
+</table>
 </form>
 </body>
 </html>

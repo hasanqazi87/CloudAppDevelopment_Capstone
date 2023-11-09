@@ -36,7 +36,7 @@
             <input type="text" name="username" placeholder="Username">
             <input type="password" name="passwd" placeholder="Password">
             <input type="submit" value="Log In" class="btn btn-primary">
-            <a href="#"><input type="button" value="Sign Up" class="btn btn-secondary"></a>
+            <a href="{% url 'djangoapp:signup' %}"><input type="button" value="Sign Up" class="btn btn-secondary"></a>
             </form>
             
             {% endif %}
