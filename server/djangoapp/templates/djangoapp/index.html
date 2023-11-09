@@ -26,7 +26,12 @@
             <a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a>
         </div>
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Log In</a>
+            <form action="" method="post">
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="passwrd" placeholder="Password">
+            <input type="submit" value="Log In" class="btn btn-primary">
+            <input type="button" value="Sign Up" class="btn btn-secondary">
+            </form>
         </div>
     </div>
 </nav>
