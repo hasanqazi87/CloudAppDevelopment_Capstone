@@ -5,7 +5,6 @@ from requests.auth import HTTPBasicAuth
 
 
 def get_request(url, **kwargs):
-    print(kwargs)
     print("GET from {} ".format(url))
     try:
         # Call get method of requests library with URL and parameters
@@ -26,14 +25,14 @@ def get_request(url, **kwargs):
 def get_dealers_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url)
+    json_result = get_request(url, **kwargs)
     if json_result:
         # Get the row list in JSON as dealers
-        dealers = json_result["rows"]
+        dealers = json_result
         # For each dealer object
-        for dealer in dealers:
+        for dealer_doc in dealers:
             # Get its content in `doc` object
-            dealer_doc = dealer["doc"]
+            #dealer_doc = dealer["doc"]
             # Create a CarDealer object with values in `doc` object
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
                                    id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],

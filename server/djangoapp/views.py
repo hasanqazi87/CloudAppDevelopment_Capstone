@@ -52,11 +52,12 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://d65e5e43-83be-4e04-bf34-e149095716c3-bluemix.cloudantnosqldb.appdomain.cloud"
+        #url = "https://d65e5e43-83be-4e04-bf34-e149095716c3-bluemix.cloudantnosqldb.appdomain.cloud/api/dealership"
+        url = 'https://hasanqazi87-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/dealership'
         # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
+        dealerships = get_dealers_from_cf(url, **request.GET)
         # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        dealer_names = ', '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
 
