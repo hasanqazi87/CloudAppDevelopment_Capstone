@@ -40,7 +40,7 @@ def get_dealers_from_cf(url, **kwargs):
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 def analyze_review_sentiments(text):
     url = 'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/e06a879c-aa34-4009-9818-82f5d6299f79'
-    api_key = 'K61HuXiosknlPuzdmJD_c2dYk-QvLJwVTMMMmH1uIoVq'
+    api_key = ''
     sentiment = requests.get(url, headers={'Content-Type': 'application/json'}, auth=HTTPBasicAuth('apikey', api_key), params={'text': text})
     return sentiment
 # - Call get_request() with specified arguments
