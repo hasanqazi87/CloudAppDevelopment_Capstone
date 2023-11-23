@@ -58,7 +58,7 @@ class CarDealer:
 
 
 class DealerReview:
-    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, _id):
+    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, id):
         self.dealership = dealership
         self.name = name
         self.purchase = purchase
@@ -68,7 +68,7 @@ class DealerReview:
         self.car_model = car_model
         self.car_year = car_year
         self.sentiment = sentiment
-        self.id = _id
+        self.id = id
 
     def __str__(self):
         return f'{self.car_year} {self.car_make} {self.car_model}'
