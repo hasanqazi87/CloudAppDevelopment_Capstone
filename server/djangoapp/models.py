@@ -54,7 +54,7 @@ class CarDealer:
         self.zip = zip
 
     def __str__(self):
-        return f"Dealer name: {self.full_name}"
+        return f"< Dealer name: {self.full_name} >"
 
 
 class DealerReview:
@@ -71,4 +71,4 @@ class DealerReview:
         self.id = id
 
     def __str__(self):
-        return f'{self.car_year} {self.car_make} {self.car_model}'
+        return f'< {self.car_year} {self.car_make} {self.car_model} >'

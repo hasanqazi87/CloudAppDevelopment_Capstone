@@ -60,7 +60,7 @@ def get_dealerships(request):
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
-    url = f'https://hasanqazi87-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/review?dealerId={dealer_id}'
+    url = f'https://hasanqazi87-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/review'
     reviews = get_dealer_reviews_from_cf(url, dealer_id=dealer_id)
     return HttpResponse(reviews)
 
