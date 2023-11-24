@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dealership Review</title>
+    <title>{% block title %}Dealerships List{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -29,16 +29,15 @@
             {% if user.is_authenticated %}
             <span>Hello <strong>{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</strong></span>
             <a href="{% url 'djangoapp:logout' %}"><input type="button" value="Log Out" class="btn btn-secondary"></a>
+            {% block add_review %}{% endblock %}
             {% else %}
             <form action="{% url 'djangoapp:login' %}" method="post">
             {% csrf_token %}
-            {% if msg %}<span>{{ msg }}<span>{% endif %}
             <input type="text" name="username" placeholder="Username">
             <input type="password" name="passwd" placeholder="Password">
             <input type="submit" value="Log In" class="btn btn-primary">
             <a href="{% url 'djangoapp:signup' %}"><input type="button" value="Sign Up" class="btn btn-secondary"></a>
             </form>
-            
             {% endif %}
         </div>
     </div>
@@ -46,8 +45,39 @@
 
 <!--Add a dealer table here -->
 <div class="container-fluid">
-{% block content %}{% endblock %}
+{% block content %}
+<table class="table" id="table" data-filter-control="true">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th data-field="full_name">Dealer Name</th>
+            <th data-field="city">City</th>
+            <th data-field="address">Address</th>
+            <th data-field="zip">Zipcode</th>
+            <th data-field="st" data-filter-control="select">State</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dealer in dealerships %}
+        <tr>
+            <td>{{dealer.id}}</td>
+            <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+            <td>{{dealer.city}}</td>
+            <td>{{dealer.address}}</td>
+            <td>{{dealer.zip}}</td>
+            <td>{{dealer.st}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
 </div>
 </body>
-
+{% block extrascripts %}
+<script>
+    $(function() {
+      $('#table').bootstrapTable()
+    })
+</script>
+{% endblock %}
 </html>

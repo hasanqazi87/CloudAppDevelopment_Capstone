@@ -2,12 +2,13 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarModel
 from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
 from operator import itemgetter
+from math import floor
 import logging
 import json
 import os
@@ -56,49 +57,46 @@ def registration_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    if request.method == "GET":
-        dealerships = get_dealers_from_cf(DEALERSHIP_URL, **request.GET)
-        return HttpResponse(dealerships)
+    context = {
+        'dealerships': get_dealers_from_cf(DEALERSHIP_URL, **request.GET)
+    }
+    return render(request, 'djangoapp/index.html', context)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
-    reviews = get_dealer_reviews_from_cf(REVIEW_URL, dealer_id=dealer_id)
-    return HttpResponse(reviews)
+    dealer = get_dealers_from_cf(DEALERSHIP_URL, id=dealer_id)
+    context = {
+        'dealer': dealer.pop() if dealer else [],
+        'reviews': get_dealer_reviews_from_cf(REVIEW_URL, dealer_id=dealer_id)
+    }
+    return render(request, 'djangoapp/dealer_details.html', context)
 
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
+    dealer = get_dealers_from_cf(DEALERSHIP_URL, id=dealer_id)
+    cars = CarModel.objects.filter(dealer_id=dealer_id)
+    context = {
+        'dealer': dealer.pop() if dealer else [],
+        'cars': cars,
+    }
     if not request.user.is_authenticated:
         return redirect(reverse('djangoapp:index'))
-    if request.method == 'GET':
-        # post_data = request.POST
-        # Frontend form not built yet, using hardcoded example data to test the view
+    if request.method == 'POST':
+        post_data = request.POST
+        car_selected = cars.get(pk=post_data['car'])
         json_payload = {
-                "time": datetime.utcnow().isoformat(),
-                "id": 4270,
-                "name": "Hasan",
-                "dealership": dealer_id,
-                "review": "Excellent service",
-                "purchase": False,
-                "purchase_date": "2022-10-31",
-                "car_make": "Acura",
-                "car_model": "TLX",
-                "car_year": "2023"
+            'id': floor(datetime.now().timestamp()),
+            'name': post_data['person'],
+            'dealership': dealer_id,
+            'review': post_data['content'],
+            'purchase': 'on' in post_data['purchase'],
+            'purchase_date': post_data['purchase_date'],
+            'car_make': car_selected.car_make.name,
+            'car_model': car_selected.name,
+            'car_year': car_selected.year.strftime('%Y'),
         }
-        # json_payload = {
-        #     'review': {
-        #         'time': datetime.utcnow().isoformat(),
-        #         'id': post_data['id'],
-        #         'name': post_data['name'],
-        #         'dealership': dealer_id,
-        #         'review': post_data['review'],
-        #         'purchase': post_data['purchase'],
-        #         'purchase_date': post_data['purchase_date'],
-        #         'car_make': post_data['car_make'],
-        #         'car_model': post_data['car_model'],
-        #         'car_year': post_data['car_year'],
-        #     }
-        # }
-        response = post_request(REVIEW_URL, json_payload=json_payload)
-        return HttpResponse(response)
+        post_request(REVIEW_URL, json_payload=json_payload)
+        return redirect(reverse('djangoapp:dealer_details', kwargs={'dealer_id': dealer_id}))
+    return render(request, 'djangoapp/add_review.html', context)
