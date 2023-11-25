@@ -16,8 +16,8 @@ import os
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-DEALERSHIP_URL = 'https://hasanqazi87-3000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/dealership'
-REVIEW_URL = 'https://hasanqazi87-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/review'
+DEALERSHIP_URL = 'https://hasanqazi87-3000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/dealership'
+REVIEW_URL = 'https://hasanqazi87-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/review'
 
 
 # Create an `about` view to render a static about page
